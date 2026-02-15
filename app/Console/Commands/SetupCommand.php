@@ -27,15 +27,12 @@ class SetupCommand extends Command
         $envPath = base_path('.env');
         $needsKey = ! preg_match('/^APP_KEY=.+/m', file_get_contents($envPath));
         if ($needsKey) {
-            $this->call('key:generate', ['--force' => true]);
-        }
+            $exitCode = $this->call('key:generate', ['--force' => true]);
+            if ($exitCode !== 0) {
+                $this->error('key:generate failed. Run manually: php artisan key:generate --force');
 
-        $this->info('Running composer install...');
-        $result = Process::path(base_path())->timeout(300)->run('composer install --no-interaction');
-        if (! $result->successful()) {
-            $this->error('composer install failed: '.$result->errorOutput());
-
-            return self::FAILURE;
+                return self::FAILURE;
+            }
         }
 
         if (! file_exists(public_path('storage'))) {
