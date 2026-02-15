@@ -4,7 +4,7 @@ Jednoduchá evidencia áut a dielov. Prihlásený používateľ môže pridáva�
 
 Backend je Laravel 12, frontend Vue 3 cez Inertia, auth rieši Fortify. UI je Tailwind + shadcn-vue.
 
-## STACK
+## Požiadavky
 
 - PHP 8.2+
 - Composer
