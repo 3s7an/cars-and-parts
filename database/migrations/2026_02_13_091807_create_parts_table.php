@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('serial_number')->unique();
-            $table->string('car_id')->references('id')->on('cars')->onDelete('cascade');
+            $table->foreignId('car_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
