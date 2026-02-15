@@ -30,7 +30,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
                 <Heading
                     variant="small"
                     title="Update password"
-                    description="Ensure your account is using a long, random password to stay secure"
+                    description="Use a long, random password so your account stays secure"
                 />
 
                 <Form

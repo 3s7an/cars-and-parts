@@ -2,64 +2,98 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarRequest;
 use App\Models\Car;
+use App\Services\CarService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class CarController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $cars = Car::with('parts')
+            ->nameLike($request->query('name'))
+            ->isRegistered($request->query('is_registered'))
+            ->registrationNumberLike($request->query('registration_number'))
+            ->get();
+
+        return Inertia::render('Cars', [
+            'cars' => $cars,
+            'filters' => $request->only('name', 'is_registered', 'registration_number'),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return Inertia::render('Cars/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(CarRequest $request, CarService $carService)
+    {   
+        try {
+
+            $carService->create($request->validated());
+
+            return redirect() 
+            ->route('cars')
+            ->with('success', 'Car created successfully');
+
+        } catch(\Throwable $e){
+            Log::error($e); 
+
+            return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', 'Car was not created');
+
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Car $car)
     {
-        //
+        return redirect()->route('cars.edit', $car);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Car $car)
     {
-        //
+        return Inertia::render('Cars/Create', ['car' => $car]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Car $car)
+    public function update(CarRequest $request, Car $car, CarService $carService)
     {
-        //
+        try {
+            $carService->update($car, $request->validated());
+
+            return redirect()
+                ->route('cars')
+                ->with('success', 'Car was successfully updated');
+        } catch (\Throwable $e) {
+            Log::error($e);
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Car was not updated');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Car $car)
-    {
-        //
+    public function destroy(Car $car, CarService $carService)
+    {   
+        try{
+            $carService->delete($car);
+
+            return redirect()
+            ->route('cars')
+            ->with('success', 'Car was successfully deleted');
+
+        } catch (\Throwable $e){
+
+            Log::error($e);
+            return redirect()
+            ->back()
+            ->with('error', 'Car was not deleted');
+        }
     }
 }
