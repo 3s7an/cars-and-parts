@@ -14,17 +14,16 @@ Backend je Laravel 12, frontend Vue 3 cez Inertia, auth rieši Fortify. UI je Ta
 ## Ako to spustiť
 
 1. Naklonuj repo, choď do priečinka projektu.
-2. Skopíruj `.env.example` do `.env` a vyplň aspoň `DB_*` (databáza musí existovať).
-3. Spusti:
+2. Spusti:
    ```bash
    composer install
    ```
-4. Spusti setup:
+3. Spusti setup:
    ```bash
    php artisan setup
    ```
-   Príkaz sám spraví: vygeneruje kľúč ak chýba, migrácie, `storage:link`, `npm install` a `npm run build`. Ak nechceš frontend build, pridaj `--no-build`. Ak chceš seedovať DB, pridaj `--seed`.
-5. Spusti server:
+   Príkaz sám spraví: skopíruje `.env.example` do `.env` (ak `.env` ešte neexistuje), vygeneruje kľúč ak chýba, migrácie, `storage:link`, `npm install` a `npm run build`. Pred prvým spustením alebo po ňom uprav `.env` a vyplň `DB_*` (databáza musí existovať). Ak nechceš frontend build, pridaj `--no-build`. Ak chceš seedovať DB, pridaj `--seed`.
+4. Spusti server:
    ```bash
    php artisan serve
    ```
