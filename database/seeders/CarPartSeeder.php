@@ -2,21 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\Car;
-use App\Models\Part;
 use Illuminate\Database\Seeder;
 
 class CarPartSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * @deprecated Použi RagSearchSeeder — zachované kvôli spätnej kompatibilite volania.
      */
     public function run(): void
     {
-        $cars = Car::factory(3)->create();
-
-        foreach ($cars as $car) {
-            Part::factory(2)->for($car)->create();
-        }
+        $this->call(RagSearchSeeder::class);
     }
 }

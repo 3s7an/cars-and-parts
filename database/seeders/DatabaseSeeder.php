@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(CarPartSeeder::class);
+        $this->call(RagSearchSeeder::class);
 
         // User::factory(10)->create();
 
