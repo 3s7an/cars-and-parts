@@ -18,6 +18,7 @@ class PartRequest extends FormRequest
                 Rule::unique('parts', 'serial_number')->ignore($this->route('part')),
             ],
             'car_id' => 'required|integer|exists:cars,id',
+            'description' => 'nullable|string|max:5000',
         ];
     }
 }

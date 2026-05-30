@@ -4,16 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Car extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'registration_number', 'is_registered'];
+    protected $fillable = ['name', 'registration_number', 'is_registered', 'description'];
 
-    public function parts()
+    public function parts(): HasMany
     {
         return $this->hasMany(Part::class);
+    }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(CarCategory::class);
     }
 
     public function scopeNameLike($query, ?string $value): void

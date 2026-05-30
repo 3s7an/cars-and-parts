@@ -27,6 +27,7 @@ class PartFactory extends Factory
                 'Distributor', 'Ignition coil', 'Door lock',
             ]),
             'serial_number' => fake()->unique()->regexify('[A-Z0-9]{8}'),
+            'description' => fake()->optional(0.7)->sentence(),
             'car_id' => Car::factory(),
         ];
     }

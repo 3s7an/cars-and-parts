@@ -25,6 +25,7 @@ class CarFactory extends Factory
             'name' => fake()->unique()->regexify('Car [A-Z0-9]{4,8}'),
             'registration_number' => $isRegistered ? fake()->unique()->regexify('[A-Z]{2}[0-9]{6}') : null,
             'is_registered' => $isRegistered,
+            'description' => fake()->optional(0.7)->paragraph(),
         ];
     }
 

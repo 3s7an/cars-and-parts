@@ -25,6 +25,7 @@ class CarRequest extends FormRequest
                 'size:8',
                 Rule::unique('cars', 'registration_number')->ignore($this->route('car')),
             ],
+            'description' => 'nullable|string|max:5000',
         ];
     }
 }
