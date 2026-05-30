@@ -1,0 +1,74 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_APP_NAME: ${VITE_APP_NAME}
+        APP_URL: ${APP_URL}
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+    ports:
+      - "8000:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - app-storage:/var/www/html/storage
+      - app-bootstrap-cache:/var/www/html/bootstrap/cache
+    restart: unless-stopped
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_APP_NAME: ${VITE_APP_NAME}
+        APP_URL: ${APP_URL}
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+    entrypoint: ["php", "artisan"]
+    command: ["queue:work", "--tries=3", "--timeout=90"]
+    depends_on:
+      app:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+    volumes:
+      - app-storage:/var/www/html/storage
+      - app-bootstrap-cache:/var/www/html/bootstrap/cache
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.4
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      # Pri prázdnom DB_PASSWORD z .env (lokálny dev) MySQL 8.4 inak nenastartuje
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "if [ -n \"$$MYSQL_ROOT_PASSWORD\" ]; then mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\"; else mysqladmin ping -h 127.0.0.1 -uroot; fi",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  app-storage:
+  app-bootstrap-cache:
