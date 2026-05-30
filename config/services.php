@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'rag' => [
+        'api_token' => env('RAG_API_TOKEN'),
+    ],
+
 ];

@@ -10,7 +10,7 @@ class Car extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'registration_number', 'is_registered', 'description'];
+    protected $fillable = ['name', 'slug', 'registration_number', 'is_registered', 'description'];
 
     public function parts(): HasMany
     {

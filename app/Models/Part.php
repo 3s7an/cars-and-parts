@@ -11,7 +11,7 @@ class Part extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'serial_number', 'description', 'car_id'];
+    protected $fillable = ['name', 'slug', 'serial_number', 'description', 'car_id'];
 
     public function car(): BelongsTo
     {
