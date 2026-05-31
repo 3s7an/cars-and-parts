@@ -46,6 +46,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
             ],
+            'shopperChatEnabled' => filled(config('services.n8n.chat_webhook_url')),
         ];
     }
 }

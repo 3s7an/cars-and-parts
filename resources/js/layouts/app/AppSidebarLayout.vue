@@ -7,6 +7,7 @@ import AppSidebar from '@/components/AppSidebar.vue';
 import AppSidebarHeader from '@/components/AppSidebarHeader.vue';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { CheckCircle, XCircle } from 'lucide-vue-next';
+import ShopperChatWidget from '@/components/ShopperChatWidget.vue';
 import type { BreadcrumbItem } from '@/types';
 
 type Props = {
@@ -44,5 +45,6 @@ const showError = computed(() => !!flash.value.error);
             </div>
             <slot />
         </AppContent>
+        <ShopperChatWidget />
     </AppShell>
 </template>

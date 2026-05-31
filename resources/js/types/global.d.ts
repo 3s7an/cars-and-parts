@@ -20,6 +20,7 @@ declare module '@inertiajs/core' {
             auth: Auth;
             sidebarOpen: boolean;
             flash?: { success?: string; error?: string };
+            shopperChatEnabled?: boolean;
             [key: string]: unknown;
         };
     }

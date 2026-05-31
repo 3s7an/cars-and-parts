@@ -39,4 +39,8 @@ return [
         'api_token' => env('RAG_API_TOKEN'),
     ],
 
+    'n8n' => [
+        'chat_webhook_url' => env('N8N_CHAT_WEBHOOK_URL'),
+    ],
+
 ];

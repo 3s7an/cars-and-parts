@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\PartController;
+use App\Http\Controllers\ShopperChatController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -16,7 +17,11 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-/* Cars routes */ 
+Route::post('api/shopper-chat', ShopperChatController::class)
+    ->middleware(['auth', 'verified'])
+    ->name('shopper-chat');
+
+/* Cars routes */
 Route::get('cars', [CarController::class, 'index'])->middleware(['auth', 'verified'])->name('cars');
 Route::get('cars/create', [CarController::class, 'create'])->middleware(['auth', 'verified'])->name('cars.create');
 Route::post('cars', [CarController::class, 'store'])->middleware(['auth', 'verified'])->name('cars.store');
@@ -33,6 +38,5 @@ Route::get('parts/{part}', [PartController::class, 'show'])->middleware(['auth',
 Route::get('parts/{part}/edit', [PartController::class, 'edit'])->middleware(['auth', 'verified'])->name('parts.edit');
 Route::put('parts/{part}', [PartController::class, 'update'])->middleware(['auth', 'verified'])->name('parts.update');
 Route::delete('parts/{part}', [PartController::class, 'destroy'])->middleware(['auth', 'verified'])->name('parts.delete');
-
 
 require __DIR__.'/settings.php';
