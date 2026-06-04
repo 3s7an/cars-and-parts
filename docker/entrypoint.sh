@@ -20,6 +20,9 @@ done
 
 php artisan migrate --force --no-interaction
 
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R ug+rwx storage bootstrap/cache
+
 if [ "$APP_ENV" = "production" ]; then
     php artisan config:cache
     php artisan route:cache
