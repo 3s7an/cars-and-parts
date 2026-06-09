@@ -15,9 +15,9 @@ class VerifyRagApiToken
     {
         $token = config('services.rag.api_token');
 
-        if ($token === null || $token === '') {
+        if ($token === null || trim($token) === '') {
             return response()->json([
-                'message' => 'RAG API is not configured. Set RAG_API_TOKEN in .env.',
+                'message' => 'API token is not configured - set it in .env. (RAG_API_TOKEN)',
             ], 503);
         }
 
@@ -26,7 +26,7 @@ class VerifyRagApiToken
 
         if (! is_string($provided) || ! hash_equals($token, $provided)) {
             return response()->json([
-                'message' => 'Unauthorized.',
+                'message' => 'Access denied - unauthorized.',
             ], 401);
         }
 
