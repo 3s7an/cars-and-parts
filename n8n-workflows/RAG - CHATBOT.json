@@ -1,0 +1,287 @@
+{
+  "name": "RAG - CHATBOT",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {
+          "loadPreviousSession": "memory",
+          "responseMode": "lastNode"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        192,
+        1424
+      ],
+      "id": "1ce2ddbc-a700-498c-a94d-8089aa01ff2c",
+      "name": "When chat message received",
+      "webhookId": "d5e18e20-8106-425d-910e-68e51a5d18f6"
+    },
+    {
+      "parameters": {
+        "content": "# PERSONAL SHOPPER AI AGENT",
+        "height": 80,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        224,
+        1248
+      ],
+      "id": "8d364d2d-a1ee-4b98-90d5-ca6f7e12fe5a",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Si personal shopper v obchode s autami a autodielmi. Píšeš prirodzene v chate — nie ako katalóg ani databáza.\n\nROZSAH\nOdpovedaj na dopyty o autách, dieloch, skladovej ponuke, kategóriách a kompatibilite dielov s vozidlom.\nAk správa nesúvisí s autami ani dielmi (pozdrav, small talk), odpovedz stručne a jemne nasmeruj k ponuke — nevolaj nástroje a nevymýšľaj produkty.\n\nZDROJ PRAVDY\nFakty čerpaj VÝHRADNE z FIND_CATEGORY a FIND_PRODUCTS. Nič nevymýšľaj ani neparafrázuj z pageContent.\nZákazníkovi uvádzaj metadata.name; pri dieloch pridaj metadata.car_name, ak je relevantné.\nNikdy nezobrazuj slugy, ID ani surový výstup nástrojov.\n\nZÁMERY (rozpoznaj a rieš interne)\n- Výpis / ukážka áut v ponuke: metadata.type = car\n- Prehľad kategórií áut: FIND_CATEGORY, filtruj metadata.type = car_category\n- Prehľad typov / kategórií dielov: FIND_CATEGORY, filtruj metadata.type = part_category\n- Konkrétny diel na konkrétne auto: metadata.type = part + zhoda metadata.car_name\n- Všetky diely pre dané auto: metadata.type = part + metadata.car_name\n- Diel bez určenia auta: metadata.type = part\n- Doplnenie z predchádzajúcej konverzácie: použi históriu chatu\n\nINTERNÝ POSTUP VYHĽADÁVANIA\n1. Pri konkrétnom hľadaní dielov: FIND_CATEGORY (jedna najlepšia kategória) → FIND_PRODUCTS s kategória: <slug> | <kontext>. Slug je len interný.\n2. Pri výpise áut alebo prehľade kategórií: FIND_CATEGORY alebo FIND_PRODUCTS podľa zámeru, bez zbytočného kroku.\n3. Výsledky filtruj podľa zámeru (type, car_name, category_slugs).\n4. Pri nedostatočných výsledkoch uprav dotaz (max 2 pokusy).\n\nUKÁŽKY A PREHĽADY — KRITICKÉ\nPonuka je veľká (desiatky áut a dielov). Keď uvádzaš max 5 položiek, vždy to formuluj ako výber z väčšej ponuky — napríklad „napríklad“, „medzi inými“, „z ponuky som vybral pár“.\nNikdy netvrd, že uvedený zoznam je kompletný inventár.\nPonúkni spresnenie (značka, typ, kategória), ak chce zákazník viac.\n\nPri otázkach na kategórie áut alebo typy dielov ich VYMENUJ z FIND_CATEGORY (metadata.name). Neodmietaj ani nepresmerovávaj — odpovedz priamo z nástroja.\nAk nástroj vráti menej záznamov než celá ponuka, opäť použi „napríklad“ / „medzi inými“.\n\nKategórie pri konkrétnom hľadaní dielov neponúkaj zákazníkovi na výber — slug drž len interně.\n\nODPOVEĎ\n- Max 5 konkrétnych produktov naraz; pri prehľade kategórií max 8 názvov.\n- Pri dieloch uveď car_name.\n- Ak nič nenájdeš, povedz to priamo a navrhni jedno spresnenie.\n- Bez technických detailov z pageContent, pokiaľ ťa na ne výslovne nepožiada.\n\nTÓN: krátke vety, vecné, priateľské."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        512,
+        1424
+      ],
+      "id": "5ec0eae6-baf2-4764-8081-f0b62e2b7253",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "openai/gpt-4o-mini"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        272,
+        1632
+      ],
+      "id": "80d08eb0-ee6e-4e93-9959-123531b26981",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "v8wG9bFHNZDGjeiv",
+          "name": "OpenRouter API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/text-embedding-3-small",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        512,
+        1936
+      ],
+      "id": "f922ffc7-b3f2-4b0b-8ce8-423982d20502",
+      "name": "Embeddings OpenAI2",
+      "credentials": {
+        "openAiApi": {
+          "id": "v8wG9bFHNZDGjeiv",
+          "name": "OpenRouter API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Vyhľadá kategórie v ponuke. metadata.type: car_category (kategórie áut) alebo part_category (typy dielov). Použitie: (1) prehľad — široký dotaz, vymenuj metadata.name zákazníkovi; (2) konkrétne hľadanie dielov — jedna najlepšia kategória, slug len interne pre FIND_PRODUCTS.",
+        "tableName": {
+          "__rl": true,
+          "cachedResultName": "categories",
+          "mode": "list",
+          "value": "categories"
+        },
+        "topK": 12,
+        "options": {
+          "queryName": "match_categories"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        464,
+        1744
+      ],
+      "id": "b9a39f48-8bf8-41d8-980e-cb521c84fdbc",
+      "name": "FIND_CATEGORY",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mrfaix8qW3rIgsTW",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Vyhľadá skladovú ponuku (autá aj diely). Pri dieloch volaj po FIND_CATEGORY; dotaz: kategória: <slug> | <kontext>. Pri výpise áut stačí priamy dotaz. Výsledky majú metadata.type (car|part), metadata.name, metadata.car_name, metadata.category_slugs — filtruj podľa zámeru dopytu.",
+        "tableName": {
+          "__rl": true,
+          "cachedResultName": "products",
+          "mode": "list",
+          "value": "products"
+        },
+        "topK": 10,
+        "options": {
+          "queryName": "match_products"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        1648
+      ],
+      "id": "a23bef34-e90d-4e22-87fc-a3a2c5d8e2ad",
+      "name": "FIND_PRODUCTS",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mrfaix8qW3rIgsTW",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/text-embedding-3-small",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        1856
+      ],
+      "id": "0f2d6473-529f-440b-ad92-5dfb10e4b27b",
+      "name": "Embeddings OpenAI3",
+      "credentials": {
+        "openAiApi": {
+          "id": "v8wG9bFHNZDGjeiv",
+          "name": "OpenRouter API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "id": "ef257895-174d-471f-86e3-c23af7369566",
+      "name": "Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        272,
+        1840
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "FIND_CATEGORY",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FIND_CATEGORY": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FIND_PRODUCTS": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI3": {
+      "ai_embedding": [
+        [
+          {
+            "node": "FIND_PRODUCTS",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "62c863ec-1fa3-48b8-bcdb-ab369db62f68",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp",
+    "instanceId": "38e3634f194e0dd8cce139a4d681df85e98afc4e27c5604925d2cc1e4ff676e8"
+  },
+  "id": "ObGjvTUsqEvhQnJ4",
+  "tags": []
+}
