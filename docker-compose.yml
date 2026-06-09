@@ -20,6 +20,7 @@ services:
       - app-storage:/var/www/html/storage
       - app-bootstrap-cache:/var/www/html/bootstrap/cache
       - ./storage/logs:/var/www/html/storage/logs
+      - ./database/seeders/data:/var/www/html/database/seeders/data
     restart: unless-stopped
 
   mysql:
