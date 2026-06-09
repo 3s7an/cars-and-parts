@@ -28,7 +28,6 @@ class PartCategoryFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name) . '-' . fake()->unique()->regexify('[a-z0-9]{4}'),
-            'part_id' => Part::factory(),
         ];
     }
 }

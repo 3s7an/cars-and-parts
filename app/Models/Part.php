@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Part extends Model
 {
@@ -18,9 +19,9 @@ class Part extends Model
         return $this->belongsTo(Car::class);
     }
 
-    public function categories(): HasMany
+    public function categories(): BelongsToMany
     {
-        return $this->hasMany(PartCategory::class);
+        return $this->belongsToMany(PartCategory::class);
     }
 
     public function scopeNameLike($query, ?string $value): void

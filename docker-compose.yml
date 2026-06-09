@@ -47,6 +47,22 @@ services:
       start_period: 30s
     restart: unless-stopped
 
+  dbhub:
+    image: bytebase/dbhub:latest
+    ports:
+      - "${DBHUB_PORT:-8080}:8080"
+    environment:
+      DSN: ${DBHUB_DSN:-mysql://root@mysql:3306/${DB_DATABASE:-cars_parts}}
+    command:
+      - --transport
+      - http
+      - --port
+      - "8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   mysql-data:
   app-storage:

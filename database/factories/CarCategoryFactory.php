@@ -28,7 +28,6 @@ class CarCategoryFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name) . '-' . fake()->unique()->regexify('[a-z0-9]{4}'),
-            'car_id' => Car::factory(),
         ];
     }
 }

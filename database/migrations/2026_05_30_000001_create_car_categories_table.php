@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->foreignId('car_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['car_id', 'slug']);
+            $table->unique('slug');
         });
     }
 

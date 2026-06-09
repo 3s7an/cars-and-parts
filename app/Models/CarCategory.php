@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class CarCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'car_id'];
+    protected $fillable = ['name', 'slug'];
 
-    public function car(): BelongsTo
+    public function cars(): BelongsToMany
     {
-        return $this->belongsTo(Car::class);
+        return $this->belongsToMany(Car::class);
     }
 }

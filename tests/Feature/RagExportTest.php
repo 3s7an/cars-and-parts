@@ -22,9 +22,7 @@ class RagExportTest extends TestCase
 
     public function test_categories_export_returns_search_text(): void
     {
-        $car = Car::factory()->create();
         CarCategory::factory()->create([
-            'car_id' => $car->id,
             'name' => 'Nárazníky',
             'slug' => 'narazniky',
         ]);
@@ -52,11 +50,11 @@ class RagExportTest extends TestCase
             'description' => 'Originálny diel',
         ]);
 
-        PartCategory::factory()->create([
-            'part_id' => $part->id,
+        $category = PartCategory::factory()->create([
             'name' => 'Nárazníky',
             'slug' => 'narazniky',
         ]);
+        $part->categories()->attach($category);
 
         $response = $this->withToken('test-rag-token')
             ->getJson('/api/rag/products');

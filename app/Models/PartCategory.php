@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class PartCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'part_id'];
+    protected $fillable = ['name', 'slug'];
 
-    public function part(): BelongsTo
+    public function parts(): BelongsToMany
     {
-        return $this->belongsTo(Part::class);
+        return $this->belongsToMany(Part::class);
     }
 }
