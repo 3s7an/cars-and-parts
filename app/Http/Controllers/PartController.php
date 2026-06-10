@@ -18,7 +18,8 @@ class PartController extends Controller
             ->nameLike($request->query('name'))
             ->serialNumberLike($request->query('serial_number'))
             ->forCar($request->query('car_id'))
-            ->get();
+            ->paginate(15)
+            ->withQueryString();
 
         $cars = $carService->getAll();
 

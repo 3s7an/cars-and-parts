@@ -24,13 +24,26 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { parts as partsRoute } from '@/routes';
 
+type PartListItem = {
+    id: number;
+    name: string;
+    serial_number: string | null;
+    car: { name: string } | null;
+};
+
+type PaginatedParts = {
+    data: PartListItem[];
+    links: { url: string | null; label: string; active: boolean }[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+    };
+};
+
 const props = defineProps<{
-    parts: Array<{
-        id: number;
-        name: string;
-        serial_number: string | null;
-        car: { name: string } | null;
-    }>;
+    parts: PaginatedParts;
     cars: Array<{ id: number; name: string }>;
     filters?: {
         name?: string;
@@ -82,6 +95,11 @@ function clearFilters() {
 function deletePart(partId: number, partName: string) {
     if (!confirm(`Are you sure you want to delete part "${partName}"?`)) return;
     router.delete(`/parts/${partId}`);
+}
+
+function goToPage(url: string | null) {
+    if (!url) return;
+    router.get(url, {}, { preserveState: true });
 }
 </script>
 
@@ -161,7 +179,7 @@ function deletePart(partId: number, partName: string) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow v-for="part in props.parts" :key="part.id">
+                    <TableRow v-for="part in props.parts.data" :key="part.id">
                         <TableCell class="font-medium">{{
                             part.name
                         }}</TableCell>
@@ -201,6 +219,25 @@ function deletePart(partId: number, partName: string) {
                     </TableRow>
                 </TableBody>
             </Table>
+
+            <nav
+                v-if="props.parts.meta.last_page > 1"
+                class="flex flex-wrap items-center justify-center gap-1"
+                aria-label="Pagination"
+            >
+                <Button
+                    v-for="(link, index) in props.parts.links"
+                    :key="index"
+                    type="button"
+                    size="sm"
+                    :variant="link.active ? 'default' : 'outline'"
+                    :disabled="!link.url"
+                    class="min-w-9"
+                    @click="goToPage(link.url)"
+                >
+                    <span v-html="link.label" />
+                </Button>
+            </nav>
         </div>
     </AppLayout>
 </template>

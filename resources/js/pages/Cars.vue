@@ -16,14 +16,27 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { cars as carsRoute } from '@/routes';
 
+type CarListItem = {
+    id: number;
+    name: string;
+    registration_number: string | null;
+    is_registered: boolean;
+    parts?: unknown[];
+};
+
+type PaginatedCars = {
+    data: CarListItem[];
+    links: { url: string | null; label: string; active: boolean }[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+    };
+};
+
 const props = defineProps<{
-    cars: Array<{
-        id: number;
-        name: string;
-        registration_number: string | null;
-        is_registered: boolean;
-        parts?: unknown[];
-    }>;
+    cars: PaginatedCars;
     filters?: {
         name?: string;
         is_registered?: string;
@@ -77,6 +90,11 @@ function clearFilters() {
 function deleteCar(carId: number, carName: string) {
     if (!confirm(`Are you sure you want to delete car "${carName}"?`)) return;
     router.delete(`/cars/${carId}`);
+}
+
+function goToPage(url: string | null) {
+    if (!url) return;
+    router.get(url, {}, { preserveState: true });
 }
 </script>
 
@@ -146,7 +164,7 @@ function deleteCar(carId: number, carName: string) {
 
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
                 <div
-                    v-for="car in props.cars"
+                    v-for="car in props.cars.data"
                     :key="car.id"
                     class="relative flex h-full flex-col overflow-hidden rounded-xl border border-sidebar-border/70 bg-card dark:border-sidebar-border"
                 >
@@ -212,6 +230,25 @@ function deleteCar(carId: number, carName: string) {
                     </div>
                 </div>
             </div>
+
+            <nav
+                v-if="props.cars.meta.last_page > 1"
+                class="flex flex-wrap items-center justify-center gap-1"
+                aria-label="Pagination"
+            >
+                <Button
+                    v-for="(link, index) in props.cars.links"
+                    :key="index"
+                    type="button"
+                    size="sm"
+                    :variant="link.active ? 'default' : 'outline'"
+                    :disabled="!link.url"
+                    class="min-w-9"
+                    @click="goToPage(link.url)"
+                >
+                    <span v-html="link.label" />
+                </Button>
+            </nav>
         </div>
     </AppLayout>
 </template>
