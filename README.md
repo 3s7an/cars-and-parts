@@ -131,7 +131,7 @@ curl -s -H "Authorization: Bearer tvoj-rag-token" \
 
 ### n8n
 
-1. Vo workflow nastav HTTP Request uzly na `http://app:80/api/rag/...` (z Docker siete) alebo `http://host.docker.internal:8000/...` z hosta — s hlavičkou `Authorization: Bearer ${RAG_API_TOKEN}`.
+1. Vo workflow nastav HTTP Request uzly na `http://app:80/api/rag/...` (z Docker siete) alebo `http://host.docker.internal:8000/...` z hosta — s hlavičkou `Authorization: Bearer ${N8N_RAG_API_TOKEN}`.
 2. Indexuj `products` a `categories` do vektorovej DB (alebo iného retrievera).
 3. Chat Trigger node — skopíruj webhook URL do `N8N_CHAT_WEBHOOK_URL`.
 4. Po zmene `.env` reštartuj: `docker compose up -d --force-recreate app queue`.

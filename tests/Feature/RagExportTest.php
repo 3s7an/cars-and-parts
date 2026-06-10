@@ -17,7 +17,7 @@ class RagExportTest extends TestCase
     {
         parent::setUp();
 
-        config(['services.rag.api_token' => 'test-rag-token']);
+        config(['services.n8n.api_token' => 'test-rag-token']);
     }
 
     public function test_categories_export_returns_search_text(): void

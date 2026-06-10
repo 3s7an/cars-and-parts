@@ -13,11 +13,11 @@ class VerifyRagApiToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = config('services.rag.api_token');
+        $token = config('services.n8n.api_token');
 
         if ($token === null || trim($token) === '') {
             return response()->json([
-                'message' => 'API token is not configured - set it in .env. (RAG_API_TOKEN)',
+                'message' => 'API token is not configured - set it in .env. (N8N_RAG_API_TOKEN)',
             ], 503);
         }
 

@@ -35,12 +35,10 @@ return [
         ],
     ],
 
-    'rag' => [
-        'api_token' => env('RAG_API_TOKEN'),
-    ],
-
     'n8n' => [
         'chat_webhook_url' => env('N8N_CHAT_WEBHOOK_URL'),
+        'rag_sync_webhook_url' => env('N8N_RAG_SYNC_WEBHOOK_URL'),
+        'api_token' => env('N8N_RAG_API_TOKEN'), // todo: zmenit namespace vsade kde treba
     ],
 
 ];

@@ -73,6 +73,38 @@ class RagDocumentExportService
             ->all();
     }
 
+    public function exportCar(Car $car): array
+    {
+        $car->loadMissing('categories');
+        return $this->formatProduct(
+            id: 'car_'.$car->id,
+            type: 'car',
+            name: $car->name,
+            slug: $car->slug,
+            description: $car->description,
+            categories: $car->categories,
+            categoryIdPrefix: 'car_category',
+            carId: null,
+            carName: null,
+        );
+    }
+
+    public function exportPart(Part $part): array
+    {
+        $part->loadMissing(['categories', 'car']);
+        return $this->formatProduct(
+            id: 'part_'.$part->id,
+            type: 'part',
+            name: $part->name,
+            slug: $part->slug,
+            description: $part->description,
+            categories: $part->categories,
+            categoryIdPrefix: 'part_category',
+            carId: $part->car_id ? 'car_'.$part->car_id : null,
+            carName: $part->car?->name,
+        );
+    }
+
     /**
      * @param  CarCategory|PartCategory  $category
      * @return array{id: string, type: string, name: string, slug: string, description: null, search_text: string}

@@ -4,9 +4,15 @@ namespace App\Services;
 
 use App\Models\Part;
 use Illuminate\Database\Eloquent\Collection;
-
+use App\Services\RagDocumentExportService;
+use App\Services\RagSyncService;
 class PartService
 {
+    public function __construct(
+        private RagDocumentExportService $ragExport,
+        private RagSyncService $ragSync
+    ){}
+    
     public function getAllWithCar(): Collection
     {
         return Part::with('car')->get();
@@ -19,16 +25,33 @@ class PartService
 
     public function create(array $data): Part
     {
-        return Part::create($data);
+        $part = Part::create($data);
+
+        $this->ragSync->queue('created', [$this->ragExport->exportPart($part)], []);
+
+        return $part;
     }
 
     public function update(Part $part, array $data): bool
     {
-        return $part->update($data);
+        $updated = $part->update($data);
+
+        if ($updated) {
+            $part->refresh();
+            $this->ragSync->queue('updated', [$this->ragExport->exportPart($part)], []);
+        }
+        return $updated;
     }
 
     public function delete(Part $part): bool
-    {
-        return $part->delete();
+    {   
+        $deleted = $part->delete();
+        $deletedIds = ['part_'.$part->id];
+
+        if($deleted){
+            $this->ragSync->queue('deleted', [], $deletedIds);
+        }
+        
+        return $deleted;
     }
 }
