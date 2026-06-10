@@ -19,6 +19,7 @@ class PartController extends Controller
             ->serialNumberLike($request->query('serial_number'))
             ->forCar($request->query('car_id'))
             ->paginate(15)
+            ->withPath(route('parts', [], false))
             ->withQueryString();
 
         $cars = $carService->getAll();

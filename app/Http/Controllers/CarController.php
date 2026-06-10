@@ -18,6 +18,7 @@ class CarController extends Controller
             ->isRegistered($request->query('is_registered'))
             ->registrationNumberLike($request->query('registration_number'))
             ->paginate(9)
+            ->withPath(route('cars', [], false))
             ->withQueryString();
 
         return Inertia::render('Cars', [

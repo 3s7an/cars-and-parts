@@ -34,12 +34,10 @@ type PartListItem = {
 type PaginatedParts = {
     data: PartListItem[];
     links: { url: string | null; label: string; active: boolean }[];
-    meta: {
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        total: number;
-    };
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
 };
 
 const props = defineProps<{
@@ -81,7 +79,7 @@ function applyFilters() {
             serial_number: filterSerialNumber.value || undefined,
             car_id: filterCarId.value === 'all' ? undefined : filterCarId.value,
         },
-        { preserveState: true },
+        { preserveScroll: true },
     );
 }
 
@@ -89,7 +87,7 @@ function clearFilters() {
     filterName.value = '';
     filterSerialNumber.value = '';
     filterCarId.value = 'all';
-    router.get(partsRoute().url, {}, { preserveState: true });
+    router.get(partsRoute().url, {}, { preserveScroll: true });
 }
 
 function deletePart(partId: number, partName: string) {
@@ -99,7 +97,7 @@ function deletePart(partId: number, partName: string) {
 
 function goToPage(url: string | null) {
     if (!url) return;
-    router.get(url, {}, { preserveState: true });
+    router.get(url, {}, { preserveScroll: true });
 }
 </script>
 
@@ -221,7 +219,7 @@ function goToPage(url: string | null) {
             </Table>
 
             <nav
-                v-if="props.parts.meta.last_page > 1"
+                v-if="(props.parts?.last_page ?? 1) > 1"
                 class="flex flex-wrap items-center justify-center gap-1"
                 aria-label="Pagination"
             >

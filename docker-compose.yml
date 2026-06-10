@@ -21,6 +21,8 @@ services:
     volumes:
       - ./.env:/var/www/html/.env
       - ./public/hot:/var/www/html/public/hot
+      - ./app:/var/www/html/app
+      - ./routes:/var/www/html/routes
       - app-storage:/var/www/html/storage
       - app-bootstrap-cache:/var/www/html/bootstrap/cache
       - ./storage/logs:/var/www/html/storage/logs
@@ -46,6 +48,7 @@ services:
         condition: service_healthy
     volumes:
       - ./.env:/var/www/html/.env
+      - ./app:/var/www/html/app
       - app-storage:/var/www/html/storage
       - app-bootstrap-cache:/var/www/html/bootstrap/cache
       - ./storage/logs:/var/www/html/storage/logs

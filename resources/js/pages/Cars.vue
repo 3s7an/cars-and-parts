@@ -27,12 +27,10 @@ type CarListItem = {
 type PaginatedCars = {
     data: CarListItem[];
     links: { url: string | null; label: string; active: boolean }[];
-    meta: {
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        total: number;
-    };
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
 };
 
 const props = defineProps<{
@@ -76,7 +74,7 @@ function applyFilters() {
                     : filterIsRegistered.value,
             registration_number: filterRegistrationNumber.value || undefined,
         },
-        { preserveState: true },
+        { preserveScroll: true },
     );
 }
 
@@ -84,7 +82,7 @@ function clearFilters() {
     filterName.value = '';
     filterRegistrationNumber.value = '';
     filterIsRegistered.value = 'all';
-    router.get(carsRoute().url, {}, { preserveState: true });
+    router.get(carsRoute().url, {}, { preserveScroll: true });
 }
 
 function deleteCar(carId: number, carName: string) {
@@ -94,7 +92,7 @@ function deleteCar(carId: number, carName: string) {
 
 function goToPage(url: string | null) {
     if (!url) return;
-    router.get(url, {}, { preserveState: true });
+    router.get(url, {}, { preserveScroll: true });
 }
 </script>
 
@@ -232,7 +230,7 @@ function goToPage(url: string | null) {
             </div>
 
             <nav
-                v-if="props.cars.meta.last_page > 1"
+                v-if="(props.cars?.last_page ?? 1) > 1"
                 class="flex flex-wrap items-center justify-center gap-1"
                 aria-label="Pagination"
             >
