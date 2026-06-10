@@ -1,0 +1,366 @@
+{
+  "name": "RAG - SAVE PRODUCTS",
+  "nodes": [
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.search_text || $json.name }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "car_id",
+                "value": "={{ $json.car_id || '' }}"
+              },
+              {
+                "name": "car_name",
+                "value": "={{ $json.car_name || '' }}"
+              },
+              {
+                "name": "category_ids",
+                "value": "={{ $json.category_ids || [] }}"
+              },
+              {
+                "name": "category_slugs",
+                "value": "={{ $json.category_slugs || [] }}"
+              },
+              {
+                "name": "id",
+                "value": "={{ $json.id }}"
+              },
+              {
+                "name": "name",
+                "value": "={{ $json.name }}"
+              },
+              {
+                "name": "slug",
+                "value": "={{ $json.slug || '' }}"
+              },
+              {
+                "name": "type",
+                "value": "={{ $json.type || '' }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        272
+      ],
+      "id": "7a5fde33-4abc-46fc-9e9b-074036170e07",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "model": "openai/text-embedding-3-small",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        576,
+        288
+      ],
+      "id": "74f91969-e40a-4364-a6bf-6a9cb255e8cc",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "v8wG9bFHNZDGjeiv",
+          "name": "OpenRouter API"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        32,
+        80
+      ],
+      "id": "a725a736-d068-43d6-97b3-8638391fd5e6",
+      "name": "'Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.search_text || $json.name }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "id",
+                "value": "={{ $json.id }}"
+              },
+              {
+                "name": "name",
+                "value": "={{ $json.name }}"
+              },
+              {
+                "name": "slug",
+                "value": "={{ $json.slug }}"
+              },
+              {
+                "name": "type",
+                "value": "={{ $json.type || '' }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        688
+      ],
+      "id": "d3fed46d-890e-448a-ad8d-9394bba9d31e",
+      "name": "Default Data Loader1"
+    },
+    {
+      "parameters": {
+        "model": "openai/text-embedding-3-small",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        736
+      ],
+      "id": "91709a43-106c-4620-8e26-da84f2b1df02",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "v8wG9bFHNZDGjeiv",
+          "name": "OpenRouter API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# GET ALL PRODUCT AND CATEGORIES  AND IMPORT THEM TO THEIR OWN SUPABASE CLUSTERS ",
+        "height": 80,
+        "width": 1680
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -64
+      ],
+      "id": "1a034e7d-490c-46b3-81a2-ad9075cc967b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "url": "https://besprent-janyce-fantasmagoric.ngrok-free.dev/api/rag/categories",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ZdhMOdmErsN6hVML"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        320,
+        464
+      ],
+      "id": "c77d34b1-3b20-477d-9e76-dbeaceedfdbc",
+      "name": "GET ALL CATEGORIES"
+    },
+    {
+      "parameters": {
+        "url": "https://besprent-janyce-fantasmagoric.ngrok-free.dev/api/rag/products",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ZdhMOdmErsN6hVML"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        320,
+        80
+      ],
+      "id": "e5b78718-fd46-4a8f-99ff-96525b03c259",
+      "name": "GET ALL PRODUCTS"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "categories",
+          "mode": "list",
+          "cachedResultName": "categories"
+        },
+        "options": {
+          "queryName": "match_categories"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        464
+      ],
+      "id": "2ad3f2f6-c24e-41a8-89ee-735cb0873d5e",
+      "name": "VECTORIZE CATEGORIES",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mrfaix8qW3rIgsTW",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "cachedResultName": "products",
+          "mode": "list",
+          "value": "products"
+        },
+        "options": {
+          "queryName": "match_products"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        80
+      ],
+      "id": "a6d6b188-0a6f-44b2-b606-ca96f4ddcd3e",
+      "name": "VECTORIZE PRODUCTS",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mrfaix8qW3rIgsTW",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "VECTORIZE PRODUCTS",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "VECTORIZE PRODUCTS",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "'Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "GET ALL CATEGORIES",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET ALL PRODUCTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader1": {
+      "ai_document": [
+        [
+          {
+            "node": "VECTORIZE CATEGORIES",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "VECTORIZE CATEGORIES",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET ALL CATEGORIES": {
+      "main": [
+        [
+          {
+            "node": "VECTORIZE CATEGORIES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET ALL PRODUCTS": {
+      "main": [
+        [
+          {
+            "node": "VECTORIZE PRODUCTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "6727f86a-b3a8-48a2-b2b0-5f133dcd6010",
+  "meta": {
+    "instanceId": "38e3634f194e0dd8cce139a4d681df85e98afc4e27c5604925d2cc1e4ff676e8"
+  },
+  "id": "LnSkFvRbbZFG1q6d",
+  "tags": []
+}
