@@ -32,26 +32,27 @@ class PartController extends Controller
     public function create(CarService $carService)
     {
         $cars = $carService->getAll();
+
         return Inertia::render('Parts/Create', ['cars' => $cars]);
     }
 
     public function store(PartRequest $request, PartService $partService)
-    {   
-        try{
+    {
+        try {
             $partService->create($request->validated());
 
-            return redirect() 
-            ->route('parts')
-            ->with('success', 'Part created successfully');
+            return redirect()
+                ->route('parts')
+                ->with('success', 'Part created successfully');
 
-        } catch( \Throwable $e){
+        } catch (\Throwable $e) {
 
             Log::error($e);
 
             return redirect()
-            ->back()
-            ->withInput()
-            ->with('error', 'Part was not created.');
+                ->back()
+                ->withInput()
+                ->with('error', 'Part was not created.');
         }
 
     }
@@ -64,6 +65,7 @@ class PartController extends Controller
     public function edit(Part $part, CarService $carService)
     {
         $cars = $carService->getAll();
+
         return Inertia::render('Parts/Create', ['part' => $part, 'cars' => $cars]);
     }
 
@@ -91,16 +93,16 @@ class PartController extends Controller
             $partService->delete($part);
 
             return redirect()
-            ->route('parts')
-            ->with('success', 'Part was deleted');
+                ->route('parts')
+                ->with('success', 'Part was deleted');
 
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
             Log::error($e);
 
             return redirect()
-            ->back()
-            ->with('error', 'Part was not deleted');
+                ->back()
+                ->with('error', 'Part was not deleted');
         }
-        
+
     }
 }

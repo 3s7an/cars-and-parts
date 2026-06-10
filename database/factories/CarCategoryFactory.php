@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Car;
 use App\Models\CarCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -27,7 +26,7 @@ class CarCategoryFactory extends Factory
 
         return [
             'name' => $name,
-            'slug' => Str::slug($name) . '-' . fake()->unique()->regexify('[a-z0-9]{4}'),
+            'slug' => Str::slug($name).'-'.fake()->unique()->regexify('[a-z0-9]{4}'),
         ];
     }
 }

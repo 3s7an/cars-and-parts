@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { BreadcrumbItem } from '@/types';
-import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
 
 const props = withDefaults(
     defineProps<{
@@ -17,7 +17,13 @@ const props = withDefaults(
 const showBackButton = computed(() => {
     if (!props.breadcrumbs || props.breadcrumbs.length < 2) return false;
     const last = props.breadcrumbs[props.breadcrumbs.length - 1].title;
-    return ['Create', 'Create Car', 'Edit Car', 'Create Part', 'Edit Part'].includes(last);
+    return [
+        'Create',
+        'Create Car',
+        'Edit Car',
+        'Create Part',
+        'Edit Part',
+    ].includes(last);
 });
 
 const backHref = computed(() => {
@@ -40,10 +46,9 @@ const createUrl = computed(() => {
     }
     const lastBreadcrumb = props.breadcrumbs[props.breadcrumbs.length - 1];
     const title = lastBreadcrumb.title.toLowerCase();
-    
+
     return `/${title}/create`;
 });
-
 </script>
 
 <template>
@@ -58,10 +63,18 @@ const createUrl = computed(() => {
         </div>
         <div class="flex items-center gap-2">
             <template v-if="showBackButton">
-                <Link :href="backHref" class="rounded-md border border-sidebar-border bg-white px-4 py-1.5 text-black hover:bg-gray-100">Back</Link>
+                <Link
+                    :href="backHref"
+                    class="rounded-md border border-sidebar-border bg-white px-4 py-1.5 text-black hover:bg-gray-100"
+                    >Back</Link
+                >
             </template>
             <template v-else-if="breadcrumbs && breadcrumbs.length > 0">
-                <Link :href="createUrl" class="rounded-md border border-sidebar-border bg-white px-4 py-1.5 text-black hover:bg-gray-100">{{ addButtonText }}</Link>
+                <Link
+                    :href="createUrl"
+                    class="rounded-md border border-sidebar-border bg-white px-4 py-1.5 text-black hover:bg-gray-100"
+                    >{{ addButtonText }}</Link
+                >
             </template>
         </div>
     </header>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
+import { CheckCircle, XCircle } from 'lucide-vue-next';
+import { computed } from 'vue';
 import AppContent from '@/components/AppContent.vue';
 import AppShell from '@/components/AppShell.vue';
 import AppSidebar from '@/components/AppSidebar.vue';
 import AppSidebarHeader from '@/components/AppSidebarHeader.vue';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CheckCircle, XCircle } from 'lucide-vue-next';
 import ShopperChatWidget from '@/components/ShopperChatWidget.vue';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import type { BreadcrumbItem } from '@/types';
 
 type Props = {
@@ -19,7 +19,9 @@ withDefaults(defineProps<Props>(), {
 });
 
 const page = usePage();
-const flash = computed(() => (page.props.flash as { success?: string; error?: string }) ?? {});
+const flash = computed(
+    () => (page.props.flash as { success?: string; error?: string }) ?? {},
+);
 const showSuccess = computed(() => !!flash.value.success);
 const showError = computed(() => !!flash.value.error);
 </script>
@@ -30,7 +32,9 @@ const showError = computed(() => !!flash.value.error);
         <AppContent variant="sidebar" class="overflow-x-hidden">
             <AppSidebarHeader :breadcrumbs="breadcrumbs" />
             <div v-if="showSuccess" class="px-4 pt-2">
-                <Alert class="border-green-500/50 bg-green-500/10 text-green-700 dark:text-green-400">
+                <Alert
+                    class="border-green-500/50 bg-green-500/10 text-green-700 dark:text-green-400"
+                >
                     <CheckCircle class="size-4" />
                     <AlertTitle>Success</AlertTitle>
                     <AlertDescription>{{ flash.success }}</AlertDescription>

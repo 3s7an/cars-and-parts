@@ -7,7 +7,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
-
 class SyncRagDocumentJob implements ShouldQueue
 {
     use Queueable;
@@ -16,10 +15,10 @@ class SyncRagDocumentJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public string $action, 
-        public array $documents = [], 
+        public string $action,
+        public array $documents = [],
         public array $deleteIds = [],
-    ){}
+    ) {}
 
     /**
      * Execute the job.

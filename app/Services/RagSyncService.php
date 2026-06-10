@@ -4,11 +4,11 @@ namespace App\Services;
 
 use App\Exceptions\RagSyncNotConfiguredException;
 use App\Exceptions\RagSyncRequestException;
+use App\Jobs\SyncRagDocumentJob;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\SyncRagDocumentJob;
 
 class RagSyncService
 {
@@ -67,7 +67,12 @@ class RagSyncService
         }
     }
 
-    public function queue(string $action, array $documents = [], array $deleteIds = []):void {
+    public function queue(string $action, array $documents = [], array $deleteIds = []): void
+    {
+        if (! $this->isConfigured()) {
+            return;
+        }
+
         SyncRagDocumentJob::dispatch($action, $documents, $deleteIds);
     }
 }

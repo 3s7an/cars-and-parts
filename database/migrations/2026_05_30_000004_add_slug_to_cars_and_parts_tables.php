@@ -21,11 +21,11 @@ return new class extends Migration
         });
 
         foreach (\App\Models\Car::query()->cursor() as $car) {
-            $car->update(['slug' => static::uniqueCarSlug($car->name, $car->id)]);
+            $car->update(['slug' => self::uniqueCarSlug($car->name, $car->id)]);
         }
 
         foreach (\App\Models\Part::query()->cursor() as $part) {
-            $part->update(['slug' => static::uniquePartSlug($part->name, $part->id)]);
+            $part->update(['slug' => self::uniquePartSlug($part->name, $part->id)]);
         }
 
         Schema::table('cars', function (Blueprint $table) {

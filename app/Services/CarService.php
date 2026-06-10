@@ -4,16 +4,13 @@ namespace App\Services;
 
 use App\Models\Car;
 use Illuminate\Database\Eloquent\Collection;
-use App\Services\RagDocumentExportService;
-use App\Services\RagSyncService;
-
 
 class CarService
-{   
+{
     public function __construct(
         private RagDocumentExportService $ragExport,
         private RagSyncService $ragSync
-    ){}
+    ) {}
 
     public function getAllWithParts(): Collection
     {
@@ -40,10 +37,10 @@ class CarService
     }
 
     public function update(Car $car, array $data): bool
-    {   
+    {
         $updated = $car->update($data);
 
-        if($updated){
+        if ($updated) {
             $car->refresh();
 
             $documents = [$this->ragExport->exportCar($car)];
@@ -53,7 +50,7 @@ class CarService
                 $documents[] = $this->ragExport->exportPart($part);
             }
 
-             $this->ragSync->queue('updated', $documents, []);
+            $this->ragSync->queue('updated', $documents, []);
         }
 
         return $updated;
@@ -65,12 +62,12 @@ class CarService
 
         $deletedIds = [
             'car_'.$car->id,
-            ...$car->parts->map(fn($p) => 'part_'.$p->id)->all(),
+            ...$car->parts->map(fn ($p) => 'part_'.$p->id)->all(),
         ];
 
         $deleted = $car->delete();
 
-        if($deleted){
+        if ($deleted) {
             $this->ragSync->queue('deleted', [], $deletedIds);
         }
 

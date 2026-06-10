@@ -31,22 +31,22 @@ class CarController extends Controller
     }
 
     public function store(CarRequest $request, CarService $carService)
-    {   
+    {
         try {
 
             $carService->create($request->validated());
 
-            return redirect() 
-            ->route('cars')
-            ->with('success', 'Car created successfully');
+            return redirect()
+                ->route('cars')
+                ->with('success', 'Car created successfully');
 
-        } catch(\Throwable $e){
-            Log::error($e); 
+        } catch (\Throwable $e) {
+            Log::error($e);
 
             return redirect()
-            ->back()
-            ->withInput()
-            ->with('error', 'Car was not created');
+                ->back()
+                ->withInput()
+                ->with('error', 'Car was not created');
 
         }
     }
@@ -80,20 +80,21 @@ class CarController extends Controller
     }
 
     public function destroy(Car $car, CarService $carService)
-    {   
-        try{
+    {
+        try {
             $carService->delete($car);
 
             return redirect()
-            ->route('cars')
-            ->with('success', 'Car was successfully deleted');
+                ->route('cars')
+                ->with('success', 'Car was successfully deleted');
 
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
 
             Log::error($e);
+
             return redirect()
-            ->back()
-            ->with('error', 'Car was not deleted');
+                ->back()
+                ->with('error', 'Car was not deleted');
         }
     }
 }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Car, Folder, Package } from 'lucide-vue-next';
-import NavFooter from '@/components/NavFooter.vue';
+import { Car, Package } from 'lucide-vue-next';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import {
@@ -15,10 +14,9 @@ import {
 } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import AppLogo from './AppLogo.vue';
-import { dashboard, cars, parts } from '@/routes';
+import { cars, parts } from '@/routes';
 
 const mainNavItems: NavItem[] = [
-
     {
         title: 'Cars',
         href: cars(),
@@ -28,19 +26,6 @@ const mainNavItems: NavItem[] = [
         title: 'Parts',
         href: parts(),
         icon: Package,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
     },
 ];
 </script>
@@ -63,10 +48,10 @@ const footerNavItems: NavItem[] = [
             <NavMain :items="mainNavItems" />
         </SidebarContent>
 
-       <SidebarFooter>
-             <!-- <NavFooter :items="footerNavItems" /> -->
+        <SidebarFooter>
+            <!-- <NavFooter :items="footerNavItems" /> -->
             <NavUser />
-        </SidebarFooter> 
+        </SidebarFooter>
     </Sidebar>
     <slot />
 </template>

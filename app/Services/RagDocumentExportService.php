@@ -76,6 +76,7 @@ class RagDocumentExportService
     public function exportCar(Car $car): array
     {
         $car->loadMissing('categories');
+
         return $this->formatProduct(
             id: 'car_'.$car->id,
             type: 'car',
@@ -92,6 +93,7 @@ class RagDocumentExportService
     public function exportPart(Part $part): array
     {
         $part->loadMissing(['categories', 'car']);
+
         return $this->formatProduct(
             id: 'part_'.$part->id,
             type: 'part',
@@ -106,7 +108,6 @@ class RagDocumentExportService
     }
 
     /**
-     * @param  CarCategory|PartCategory  $category
      * @return array{id: string, type: string, name: string, slug: string, description: null, search_text: string}
      */
     private function formatCategory(CarCategory|PartCategory $category, string $type): array

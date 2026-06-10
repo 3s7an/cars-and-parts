@@ -1,83 +1,87 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { Head, Link, router } from '@inertiajs/vue3'
-import AppLayout from '@/layouts/AppLayout.vue'
-import { type BreadcrumbItem } from '@/types'
-import { parts } from '@/routes'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Head, Link, router } from '@inertiajs/vue3';
+import { Pencil, Trash2, Search, X } from 'lucide-vue-next';
+import { ref, watch } from 'vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Pencil, Trash2, Search, X } from 'lucide-vue-next'
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
+import { parts as partsRoute } from '@/routes';
 
 const props = defineProps<{
-  parts: Array<{
-    id: number
-    name: string
-    serial_number: string | null
-    car: { name: string } | null
-  }>
-  cars: Array<{ id: number; name: string }>
-  filters?: {
-    name?: string
-    serial_number?: string
-    car_id?: string
-  }
-}>()
+    parts: Array<{
+        id: number;
+        name: string;
+        serial_number: string | null;
+        car: { name: string } | null;
+    }>;
+    cars: Array<{ id: number; name: string }>;
+    filters?: {
+        name?: string;
+        serial_number?: string;
+        car_id?: string;
+    };
+}>();
 
-const filterName = ref(props.filters?.name ?? '')
-const filterSerialNumber = ref(props.filters?.serial_number ?? '')
-const filterCarId = ref(props.filters?.car_id ?? 'all')
+const filterName = ref(props.filters?.name ?? '');
+const filterSerialNumber = ref(props.filters?.serial_number ?? '');
+const filterCarId = ref(props.filters?.car_id ?? 'all');
 
 watch(
-  () => props.filters,
-  (f) => {
-    filterName.value = f?.name ?? ''
-    filterSerialNumber.value = f?.serial_number ?? ''
-    filterCarId.value = f?.car_id ?? 'all'
-  },
-  { deep: true }
-)
+    () => props.filters,
+    (f) => {
+        filterName.value = f?.name ?? '';
+        filterSerialNumber.value = f?.serial_number ?? '';
+        filterCarId.value = f?.car_id ?? 'all';
+    },
+    { deep: true },
+);
 
 const breadcrumbs: BreadcrumbItem[] = [
-  {
-    title: 'Parts',
-    href: parts().url,
-  },
-]
+    {
+        title: 'Parts',
+        href: partsRoute().url,
+    },
+];
 
 function applyFilters() {
-  router.get(parts().url, {
-    name: filterName.value || undefined,
-    serial_number: filterSerialNumber.value || undefined,
-    car_id: filterCarId.value === 'all' ? undefined : filterCarId.value,
-  }, { preserveState: true })
+    router.get(
+        partsRoute().url,
+        {
+            name: filterName.value || undefined,
+            serial_number: filterSerialNumber.value || undefined,
+            car_id: filterCarId.value === 'all' ? undefined : filterCarId.value,
+        },
+        { preserveState: true },
+    );
 }
 
 function clearFilters() {
-  filterName.value = ''
-  filterSerialNumber.value = ''
-  filterCarId.value = 'all'
-  router.get(parts().url, {}, { preserveState: true })
+    filterName.value = '';
+    filterSerialNumber.value = '';
+    filterCarId.value = 'all';
+    router.get(partsRoute().url, {}, { preserveState: true });
 }
 
 function deletePart(partId: number, partName: string) {
-  if (!confirm(`Are you sure you want to delete part "${partName}"?`)) return
-  router.delete(`/parts/${partId}`)
+    if (!confirm(`Are you sure you want to delete part "${partName}"?`)) return;
+    router.delete(`/parts/${partId}`);
 }
 </script>
 
@@ -85,8 +89,12 @@ function deletePart(partId: number, partName: string) {
     <Head title="Parts" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-            <div class="flex flex-wrap items-end gap-4 rounded-xl border border-sidebar-border/70 bg-card p-4 dark:border-sidebar-border">
+        <div
+            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+        >
+            <div
+                class="flex flex-wrap items-end gap-4 rounded-xl border border-sidebar-border/70 bg-card p-4 dark:border-sidebar-border"
+            >
                 <div class="space-y-2">
                     <Label for="filter-name">Name</Label>
                     <Input
@@ -132,7 +140,11 @@ function deletePart(partId: number, partName: string) {
                         <Search class="mr-2 size-4" />
                         Filter
                     </Button>
-                    <Button type="button" variant="outline" @click="clearFilters">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        @click="clearFilters"
+                    >
                         <X class="mr-2 size-4" />
                         Clear filters
                     </Button>
@@ -150,7 +162,9 @@ function deletePart(partId: number, partName: string) {
                 </TableHeader>
                 <TableBody>
                     <TableRow v-for="part in props.parts" :key="part.id">
-                        <TableCell class="font-medium">{{ part.name }}</TableCell>
+                        <TableCell class="font-medium">{{
+                            part.name
+                        }}</TableCell>
                         <TableCell>{{ part.serial_number ?? '–' }}</TableCell>
                         <TableCell>{{ part.car?.name ?? '–' }}</TableCell>
                         <TableCell class="text-right">

@@ -105,7 +105,9 @@ export function useShopperChat() {
         isLoading.value = true;
 
         try {
-            const csrf = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
+            const csrf = document.querySelector<HTMLMetaElement>(
+                'meta[name="csrf-token"]',
+            )?.content;
 
             const response = await fetch('/api/shopper-chat', {
                 method: 'POST',
@@ -128,7 +130,9 @@ export function useShopperChat() {
             };
 
             if (!response.ok) {
-                throw new Error(data.message ?? 'Nepodarilo sa odoslať správu.');
+                throw new Error(
+                    data.message ?? 'Nepodarilo sa odoslať správu.',
+                );
             }
 
             if (data.session_id) {
@@ -146,7 +150,8 @@ export function useShopperChat() {
                 createdAt: new Date().toISOString(),
             });
         } catch (e) {
-            error.value = e instanceof Error ? e.message : 'Nastala neočakávaná chyba.';
+            error.value =
+                e instanceof Error ? e.message : 'Nastala neočakávaná chyba.';
         } finally {
             isLoading.value = false;
         }

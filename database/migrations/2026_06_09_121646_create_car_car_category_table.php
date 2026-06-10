@@ -18,7 +18,7 @@ return new class extends Migration
             $table->primary(['car_id', 'car_category_id']);
         });
 
-// part_part_category — analogicky
+        // part_part_category — analogicky
     }
 
     /**

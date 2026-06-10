@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Car extends Model
 {
@@ -25,8 +25,7 @@ class Car extends Model
 
     public function scopeNameLike($query, ?string $value): void
     {
-        $query->when($value !== null && $value !== '', fn ($q) =>
-            $q->where('name', 'like', '%' . $value . '%')
+        $query->when($value !== null && $value !== '', fn ($q) => $q->where('name', 'like', '%'.$value.'%')
         );
     }
 
@@ -44,8 +43,7 @@ class Car extends Model
 
     public function scopeRegistrationNumberLike($query, ?string $value): void
     {
-        $query->when($value !== null && $value !== '', fn ($q) =>
-            $q->where('registration_number', 'like', '%' . $value . '%')
+        $query->when($value !== null && $value !== '', fn ($q) => $q->where('registration_number', 'like', '%'.$value.'%')
         );
     }
 }
