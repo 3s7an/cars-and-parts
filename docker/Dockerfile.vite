@@ -1,0 +1,25 @@
+# syntax=docker/dockerfile:1
+
+FROM node:22-bookworm-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    php-cli \
+    php-mbstring \
+    php-xml \
+    php-tokenizer \
+    php-zip \
+    php-curl \
+    unzip \
+    git \
+  && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /var/www/html
+
+COPY docker/vite/entrypoint.sh /usr/local/bin/vite-entrypoint.sh
+RUN chmod +x /usr/local/bin/vite-entrypoint.sh
+
+ENTRYPOINT ["vite-entrypoint.sh"]

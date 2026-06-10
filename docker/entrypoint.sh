@@ -20,6 +20,13 @@ done
 
 php artisan migrate --force --no-interaction
 
+if [ -n "$VITE_DEV_SERVER_URL" ]; then
+    echo "$VITE_DEV_SERVER_URL" > public/hot
+    chown www-data:www-data public/hot
+else
+    rm -f public/hot
+fi
+
 chown -R www-data:www-data storage bootstrap/cache
 chmod -R ug+rwx storage bootstrap/cache
 
