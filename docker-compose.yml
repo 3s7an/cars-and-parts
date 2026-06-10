@@ -10,14 +10,17 @@ services:
       - .env
     environment:
       DB_HOST: ${DOCKER_DB_HOST:-mysql}
-      VITE_DEV_SERVER_URL: ${VITE_DEV_SERVER_URL:-}
+      VITE_DEV_SERVER_URL: ${VITE_DEV_SERVER_URL:-http://localhost:5173}
     ports:
       - "${APP_PORT:-8000}:80"
     depends_on:
       mysql:
         condition: service_healthy
+      vite:
+        condition: service_started
     volumes:
       - ./.env:/var/www/html/.env
+      - ./public/hot:/var/www/html/public/hot
       - app-storage:/var/www/html/storage
       - app-bootstrap-cache:/var/www/html/bootstrap/cache
       - ./storage/logs:/var/www/html/storage/logs
