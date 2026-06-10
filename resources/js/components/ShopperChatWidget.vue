@@ -86,8 +86,7 @@ function handleSubmit(): void {
                         v-if="!hasMessages && !isLoading"
                         class="rounded-xl bg-muted px-3 py-2 text-sm text-muted-foreground"
                     >
-                        Ahoj! Pomôžem ti nájsť autá alebo diely. Napríklad:
-                        „Hľadám brzdy pre Octaviu.“
+                        Ahoj! Ako ti môžem pomôcť?
                     </p>
 
                     <div
