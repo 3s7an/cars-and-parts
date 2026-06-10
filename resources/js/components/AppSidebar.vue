@@ -35,7 +35,7 @@ const mainNavItems: NavItem[] = [
         <SidebarHeader>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton size="lg" as-child>
+                    <SidebarMenuButton as-child tooltip="Cars & Parts">
                         <Link :href="cars()">
                             <AppLogo />
                         </Link>
